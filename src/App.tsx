@@ -1,7 +1,8 @@
 import './App.css';
+import MealPlanner from './components/MealPlanner/MealPlanner';
 
 function App() {
-  return <div className="App">d</div>;
+  return <MealPlanner />;
 }
 
 export default App;

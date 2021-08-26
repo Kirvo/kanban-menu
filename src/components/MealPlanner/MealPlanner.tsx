@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 
+import { Flex, useDisclosure } from '@chakra-ui/react';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import { reorder, move, IMealPlanner, MealsEnum, IMeal, IMealDay, IRecipe, DaysEnum } from '../../shared';
 import MealDay from './components/MealDay/MealDay';
 
 import './MealPlanner.css';
+import { IMealPlanner, DaysEnum, MealsEnum, IRecipe, IMealDay, IMeal, move, reorder } from '../../shared';
+import RecipeSidebar from '../../shared/components/Sidebar/Sidebar';
 
 const MealPlanner = () => {
-  //const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [planner, setPlanner] = useState<IMealPlanner>({
     mealDays: Object.entries(DaysEnum).map((x) => ({
@@ -28,7 +30,7 @@ const MealPlanner = () => {
   ]);
 
   const openRecipesSidebar = (e: any) => {
-    //onOpen();
+    onOpen();
   };
 
   const getList = (droppableId: string): IRecipe[] => {
@@ -76,7 +78,7 @@ const MealPlanner = () => {
         return { ...planner };
       });
 
-      // onOpen();
+      onOpen();
     } else if (source.droppableId === destination.droppableId) {
       const result = reorder(getList(source.droppableId), source.index, destination.index);
 
@@ -104,13 +106,15 @@ const MealPlanner = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
+    <Flex justify="space-around" p="32px">
       <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
         {planner.mealDays.map((mealDay: IMealDay) => (
           <MealDay mealDay={mealDay} openRecipesSidebar={openRecipesSidebar} />
         ))}
+
+        <RecipeSidebar isOpen={isOpen} onClose={onClose} recipes={sidebarRecipes} />
       </DragDropContext>
-    </div>
+    </Flex>
   );
 };
 
